@@ -1,4 +1,4 @@
-package Log::Any::Plugin::LogLevels;
+package Log::Any::Plugin::Levels;
 # ABSTRACT: Logging-level filtering plugin for log adapters
 
 use strict;
@@ -21,15 +21,15 @@ my %level_store;
 sub install {
     my ($class, $adapter_class, %args) = @_;
 
-    my $level_key = $args{level_key} || 'level';
-    croak $adapter_class . '::' . $level_key
-        . ' already exists - use level_key to specify another method name'
-        if get_old_method($adapter_class, $level_key);
+    my $accessor = $args{accessor} || 'level';
+    croak $adapter_class . '::' . $accessor
+        . q( already exists - use 'accessor' to specify another method name)
+        if get_old_method($adapter_class, $accessor);
 
     my $default_level = _verify_level($args{level} || 'warning');
 
     # Create the $log->level accessor
-    set_new_method($adapter_class, $level_key, sub {
+    set_new_method($adapter_class, $accessor, sub {
         my $self = shift;
         if (@_) {
             my $level = shift;
@@ -92,9 +92,9 @@ Log::Any::Plugin::FilterArgs - custom log-level filtering for log adapters
     use Log::Any::Adapter;
     Log::Any::Adapter->set('SomeAdapter');
 
-    # Apply the LogLevels plugin to your logger
+    # Apply the Levels plugin to your logger
     use Log::Any::Plugin;
-    Log::Any::Plugin->add('LogLevels', level => 'debug');
+    Log::Any::Plugin->add('Levels', level => 'debug');
 
 
     # In your modules
@@ -108,28 +108,28 @@ Log::Any::Plugin::FilterArgs - custom log-level filtering for log adapters
 
 =head1 DESCRIPTION
 
-Log::Any logging functions leave the decision of which log levels to ignore
-and which to actually log down to the individual adapters. Many adapters
-simply log everything.
+Log::Any leaves the decision of which log levels to ignore and which to
+actually log down to the individual adapters. Many adapters simply log
+everything.
 
-Log::Any::Plugin::LogLevels allows you to inject level filtering functionality
-into any adapter. Logs lower than $log->level are ignored.
+Log::Any::Plugin::Levels allows you to add level filtering functionality into
+any adapter. Logs lower than $log->level are ignored.
 
 The $log->is_debug family of functions are modified to reflect this level.
 
 =head1 CONFIGURATION
 
 Configuration values are passed as key-value pairs when adding the plugin:
-    Log::Any::Plugin->add('LogLevels',
-                            level     => 'debug',
-                            level_key => 'my_level');
+    Log::Any::Plugin->add('Levels',
+                            level    => 'debug',
+                            accessor => 'my_level');
 
 =head2 level => $default_level
 
 The global log level, which defaults to 'warning'. See the level method below
 for a discussion on how this is applied.
 
-=head2 level_key => $accessor_name
+=head2 accessor => $accessor_name
 
 This is the name of the $log->level accessor function.
 
