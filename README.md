@@ -1,4 +1,4 @@
-Log::Any::Plugin is intended as a companion to the Jonathan Swartz's excellent [Log::Any](http://search.cpan.org/~jswartz/Log-Any-0.13/lib/Log/Any.pm) module.
+Log::Any::Plugin is intended as a companion to Jonathan Swartz's excellent [Log::Any](http://search.cpan.org/~jswartz/Log-Any-0.13/lib/Log/Any.pm) module.
 
 It provides methods for augmenting arbitrary instances of [Log::Any::Adapters](http://search.cpan.org/~jswartz/Log-Any-Adapter-0.03/lib/Log/Any/Adapter.pm).
 
