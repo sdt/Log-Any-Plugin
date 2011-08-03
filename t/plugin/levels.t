@@ -22,7 +22,7 @@ note 'LogLevel has not been applied yet. Check default behaviour.'; {
 }
 
 note 'Applying LogLevel plugin.'; {
-    lives_ok { Log::Any::Plugin->add('LogLevels') }
+    lives_ok { Log::Any::Plugin->add('Levels') }
         '... plugin applied ok';
 }
 
@@ -66,7 +66,7 @@ note 'Check changing the log level'; {
 
 note 'Check clashing method names'; {
     throws_ok {
-        Log::Any::Plugin->add('LogLevels', level_key => 'contains_ok')
+        Log::Any::Plugin->add('Levels', accessor => 'contains_ok')
     } qr/Test::contains_ok already exists/,
         '... method name clashes get detected';
 }
