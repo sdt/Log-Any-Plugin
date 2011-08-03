@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::Most          tests => 24;
+use Test::Most          tests => 30;
 use Test::NoWarnings;
 
 use Log::Any::Adapter;
@@ -64,9 +64,32 @@ note 'Check changing the log level'; {
     $log->contains_ok('debug', '... debug gets logged');
 }
 
+note 'Check default levels;'; {
+    lives_ok { $log->level('default') }
+        '... default log levels should able to be set';
+    $log->clear;
+    is( $log->level, 'default',  '... log level should now be default' );
+    ok( ! $log->is_debug, '... $log->debug should be disabled again' );
+    $log->debug('debug');
+    $log->empty_ok('... log should be empty');
+}
+
+note 'Applying LogLevel plugin again.'; {
+    # This is a bit unrealistic, but applying the same plugin again
+    lives_ok { Log::Any::Plugin->add('Levels',
+        level => 'trace', accessor => 'level2') }
+        '... plugin applied ok';
+}
+
+note 'Checking that the inner is_xxx methods get ANDed into the new result'; {
+    ok( ! $log->is_trace, '... $log->trace should still be disabled' );
+}
+
 note 'Check clashing method names'; {
     throws_ok {
         Log::Any::Plugin->add('Levels', accessor => 'contains_ok')
     } qr/Test::contains_ok already exists/,
         '... method name clashes get detected';
 }
+
+note 'Some warnings?';

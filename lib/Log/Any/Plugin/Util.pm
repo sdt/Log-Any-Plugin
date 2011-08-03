@@ -8,7 +8,7 @@ use Carp qw(croak);
 use base qw(Exporter);
 
 our @EXPORT_OK = qw(
-    around
+    before around after
     get_old_method
     set_new_method
     get_class_name
@@ -75,11 +75,10 @@ sub set_new_method {
 }
 
 sub get_class_name {
-    my ($prefix, $spec) = @_;
+    my ($name) = @_;
 
-    return ref $spec if ref $spec;
-    return substr($spec, 1) if $spec =~ /^\+/;
-    return $prefix . $spec;
+    return substr($name, 0, 1) eq '+' ? substr($name, 1)
+                                      : 'Log::Any::Plugin::' . $name;
 }
 
 1;
@@ -194,21 +193,16 @@ same parameters as the original method: ($self, @args)
 
 =back
 
-=head2 get_class_name ( $prefix, $spec )
+=head2 get_class_name ( $name )
 
 Creates a fully-qualified class name from the abbreviated class name rules
 in Log::Any::Plugin.
 
 =over
 
-=item * $prefix
+=item * $name
 
-Fully-qualified namespace prefix to apply by default. eg: 'Log::Any::Plugin::'
-
-=item * $spec
-
-Either a namespace suffix, or a fully-qualified class name prefixed with '+',
-or an object instance.
+Either a namespace suffix, or a fully-qualified class name prefixed with '+'.
 
 =back
 

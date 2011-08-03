@@ -15,7 +15,7 @@ sub add {
 
     my $adapter_class = ref Log::Any->get_logger(category => caller());
 
-    $plugin_class = get_class_name('Log::Any::Plugin::', $plugin_class);
+    $plugin_class = get_class_name($plugin_class);
     require_dynamic($plugin_class);
 
     $plugin_class->install($adapter_class, %plugin_args);
