@@ -1,5 +1,5 @@
-package Log::Any::Plugin::FilterArgs;
-# ABSTRACT: Custom argument filtering plugin for log adapters
+package Log::Any::Plugin::PreprocessArgs;
+# ABSTRACT: Custom argument preprocessing plugin for log adapters
 
 use strict;
 use warnings;
@@ -11,19 +11,19 @@ use Data::Dumper;
 sub install {
     my ($class, $adapter_class, %args) = @_;
 
-    my $filter = $args{filter} || \&default_filter;
+    my $preprocessor = $args{preprocessor} || \&default_preprocessor;
 
-    # Inject the filter into the existing logging methods
+    # Inject the preprocessor into the existing logging methods
     #
     for my $method_name ( Log::Any->logging_methods() ) {
         around($adapter_class, $method_name, sub {
             my ($old_method, $self, @args) = @_;
-            $old_method->($self, $filter->(@args));
+            $old_method->($self, $preprocessor->(@args));
         });
     }
 }
 
-sub default_filter {
+sub default_preprocessor {
     my (@args) = @_;
 
     local $Data::Dumper::Indent    = 0;
@@ -47,9 +47,9 @@ __END__
     use Log::Any::Adapter;
     Log::Any::Adapter->set('SomeAdapter');
 
-    # Apply your own argument filter.
+    # Apply your own argument preprocessor.
     use Log::Any::Plugin;
-    Log::Any::Plugin->add('FilterArgs', \&my_filter);
+    Log::Any::Plugin->add('PreprocessArgs', \&my_func);
 
 =head1 DESCRIPTION
 
@@ -57,26 +57,26 @@ Log::Any logging functions are only defined to have a single $msg argument.
 Some adapters accept multiple arguments (like print does), but many don't.
 You may also want to do some sort of stringification of hash and list refs.
 
-Log::Any::Plugin::FilterArgs allows you to inject a function into every logging
-call, so that when you write this:
+Log::Any::Plugin::PreprocessArgs allows you to inject an argument preprocessing
+function into every logging call, so that when you write this:
 
     $log->error( ... );
 
 you effectively get this:
 
-    $log->error( my_filter( ... ) );
+    $log->error( my_function( ... ) );
 
 =head1 CONFIGURATION
 
 These configuration values are passed as key-value pairs:
-    Log::Any::Plugin->add('FilterArgs', filter => \&my_filter);
+    Log::Any::Plugin->add('PreprocessArgs', preprocessor => \&my_func);
 
-=head2 my_filter => &filter_function
+=head2 preprocessor => &my_func
 
-The filter function takes a list of arguments and should return a single string.
+The preprocessor function takes a list of arguments and should return a single
+string.
 
-The default filter joins the arguments together, and uses Data::Dumper to
-expand list and hash refs.
+See default_preprocessor below for the default preprocessor.
 
 =head1 METHODS
 
@@ -87,9 +87,9 @@ user.  Use Log::Any::Plugin->add() instead.
 
 Private method called by Log::Any::Plugin->add()
 
-=head2 default_filter
+=head2 default_preprocessor
 
-The default filter function if none is supplied. Listrefs and hashrefs are
+The default preprocessor function if none is supplied. Listrefs and hashrefs are
 expanded by Data::Dumper, and the whole lot is concatenated into one string.
 
 =cut
