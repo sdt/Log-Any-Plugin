@@ -1,4 +1,5 @@
 package Log::Any::Plugin::Util;
+# ABSTRACT: Utilities for Log::Any::Plugin classes
 
 use strict;
 use warnings;
@@ -69,7 +70,7 @@ sub set_new_method {
     my ($class, $method_name, $new_method) = @_;
 
     no warnings 'redefine';
-    no strict 'refs';
+    no strict 'refs'; ## no critic (ProhibitNoStrict)
     *{ $class . '::' . $method_name } = $new_method;
 }
 
@@ -86,10 +87,6 @@ sub get_class_name {
 __END__
 
 =pod
-
-=head1 NAME
-
-Log::Any::Plugin::Util - utilities for Log::Any::Plugin classes
 
 =head1 DESCRIPTION
 
@@ -120,6 +117,54 @@ Name of method to be modified.
 
 Coderef of the new method. Arguments are passed the same as a Moose 'around'
 modifier: ($old_method, $self, @args)
+
+=back
+
+=head2 before ( $class, $method_name, &new_method )
+
+Applies a 'before' method modifier to the given method. Semantics are very
+similar to the 'before' method modifier in Moose.
+
+Simply installs the new method if no method by that name exists.
+
+=over
+
+=item * $class
+
+Name of class containing the method.
+
+=item * $method_name
+
+Name of method to be modified.
+
+=item * &new_method
+
+Coderef of the new method. Arguments are passed the same as a Moose 'before'
+modifier: ($self, @args)
+
+=back
+
+=head2 after ( $class, $method_name, &new_method )
+
+Applies a 'after' method modifier to the given method. Semantics are very
+similar to the 'after' method modifier in Moose.
+
+Simply installs the new method if no method by that name exists.
+
+=over
+
+=item * $class
+
+Name of class containing the method.
+
+=item * $method_name
+
+Name of method to be modified.
+
+=item * &new_method
+
+Coderef of the new method. Arguments are passed the same as a Moose 'after'
+modifier: ($self, @args)
 
 =back
 
@@ -166,9 +211,5 @@ Either a namespace suffix, or a fully-qualified class name prefixed with '+',
 or an object instance.
 
 =back
-
-=head1 AUTHOR
-
-Stephen Thirlwall <stephen.thirlwall@strategicdata.com.au>
 
 =cut

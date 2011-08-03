@@ -1,4 +1,5 @@
 package Log::Any::Plugin::LogLevels;
+# ABSTRACT: Logging-level filtering plugin for log adapters
 
 use strict;
 use warnings;
@@ -140,6 +141,12 @@ that may occur. An exception will be thrown in the case of a name clash.
 There are no methods in this package which should be directly called by the
 user. Use Log::Any::Plugin->add() instead.
 
+=head2 install
+
+Private method called by Log::Any::Plugin->add()
+
+=head1 ADAPTER METHODS
+
 The following methods are injected into the adapter class.
 
 =head2 level( [ $log_level ] )
@@ -150,9 +157,5 @@ All $log objects start with the default level specified when adding the
 plugin.  Individual $log objects can set a custom level with this accessor.
 
 To reset to the default log level, specify 'default'.
-
-=head1 AUTHOR
-
-Stephen Thirlwall <stephen.thirlwall@strategicdata.com.au>
 
 =cut

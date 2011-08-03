@@ -1,4 +1,5 @@
 package Log::Any::Plugin;
+# ABSTRACT: Adapter-modifying plugins for Log::Any
 
 use strict;
 use warnings;
@@ -25,10 +26,6 @@ sub add {
 __END__
 
 =pod
-
-=head1 NAME
-
-Log::Any::Plugin - add plugins to existing adapter classes
 
 =head1 SYNOPSIS
 
@@ -87,9 +84,5 @@ These are plugin specific arguments. See the individual plugin documentation for
 what options are supported.
 
 =back
-
-=head1 AUTHOR
-
-Stephen Thirlwall <stephen.thirlwall@strategicdata.com.au>
 
 =cut

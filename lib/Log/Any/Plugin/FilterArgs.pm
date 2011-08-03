@@ -1,4 +1,5 @@
 package Log::Any::Plugin::FilterArgs;
+# ABSTRACT: Custom argument filtering plugin for log adapters
 
 use strict;
 use warnings;
@@ -39,10 +40,6 @@ sub default_filter {
 __END__
 
 =pod
-
-=head1 NAME
-
-Log::Any::Plugin::FilterArgs - custom argument filtering for log adapters
 
 =head1 SYNOPSIS
 
@@ -86,8 +83,13 @@ expand list and hash refs.
 There are no methods in this package which should be directly called by the
 user.  Use Log::Any::Plugin->add() instead.
 
-=head1 AUTHOR
+=head2 install
 
-Stephen Thirlwall <stephen.thirlwall@strategicdata.com.au>
+Private method called by Log::Any::Plugin->add()
+
+=head2 default_filter
+
+The default filter function if none is supplied. Listrefs and hashrefs are
+expanded by Data::Dumper, and the whole lot is concatenated into one string.
 
 =cut
