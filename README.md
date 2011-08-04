@@ -22,18 +22,32 @@ In the same manner that a Log::Any::Adapter is only selected at the application 
 
 The Levels plugin adds a minimum log-level to adapters that don't support this.
 
+#### Application setup
+
     use Log::Any::Adapter;
     use Log::Any::Plugin;
 
     Log::Any::Adapter->set('SomeAdapter');
     Log::Any::Plugin->add('Levels', level => 'warning');
 
-    # only log levels of 'warning' and greater will be actually logged
+#### Module code
+
+    use Log::Any qw($log);
+
+    $log->trace('This is not logged');
+    $log->warning('But this is');
+
+    $log->level('trace');
+
+    $log->warning('Now this is too');
+
 
 ### Log::Any::Plugin::PreprocessArgs
 
 The PreprocessArgs plugin allows pre-processing of the logging arguments before
 they reach the adapter.
+
+#### Application setup
 
     use Log::Any::Adapter;
     use Log::Any::Plugin;
@@ -42,7 +56,11 @@ they reach the adapter.
     Log::Any::Plugin->add('PreprocessArgs',
         preprocessor => sub { join('', @_) });
 
-    # logging functions now emit all arguments, not just the first
+#### Module code
+
+    use Log::Any qw($log);
+
+    $log->trace('All these ', 3, ' arguments get logged');
 
 ### Log::Any::Plugin::CodeRef
 
@@ -50,7 +68,7 @@ The CodeRef plugin supports passing a coderef to the logger. The coderef is
 only evaluated if that log level is enabled. This can provide an speedup if the
 logging arguments are complicated.
 
-    # Application-level setup
+#### Application setup
 
     use Log::Any::Adapter;
     use Log::Any::Plugin;
@@ -58,8 +76,7 @@ logging arguments are complicated.
     Log::Any::Adapter->set('SomeAdapter');
     Log::Any::Plugin->add('CodeRef');
 
-
-    # In your modules
+#### Module code
 
     use Log::Any qw($log);
 
