@@ -85,4 +85,7 @@ what options are supported.
 
 =back
 
+=for test_synopsis
+my (%adapter_args, %plugin_args, %other_args);
+
 =cut
