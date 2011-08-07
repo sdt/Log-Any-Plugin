@@ -12,7 +12,7 @@ use Log::Any::Plugin;
 Log::Any::Adapter->set('Test');
 use Log::Any qw($log);
 
-note 'PreprocessArgs plugin not applied yet. Checking default behaviour.'; {
+note 'Stringify plugin not applied yet. Checking default behaviour.'; {
     $log->debug('debug msg');
     eq_or_diff($log->msgs, [
         { category => 'main', level => 'debug', message => 'debug msg' },
@@ -24,12 +24,12 @@ note 'PreprocessArgs plugin not applied yet. Checking default behaviour.'; {
     ], '... further args skipped as expected');
 }
 
-note 'Applying PreprocessArgs plugin.'; {
-    lives_ok { Log::Any::Plugin->add('PreprocessArgs') }
+note 'Applying Stringify plugin.'; {
+    lives_ok { Log::Any::Plugin->add('Stringify') }
         '... plugin applied ok';
 }
 
-note 'Check functionality of default preprocesor.'; {
+note 'Check functionality of default stringifier.'; {
     $log->clear;
     $log->debug('one', 'two', 'three');
     $log->contains_ok('onetwothree', '... multiple args concatenated');
@@ -42,13 +42,14 @@ note 'Check functionality of default preprocesor.'; {
         '... hashrefs get expanded');
 }
 
-note 'Applying PreprocessArgs plugin.'; {
-    lives_ok { Log::Any::Plugin->add('PreprocessArgs',
-            preprocessor => sub { reverse @_ }) }
+note 'Applying Stringify plugin.'; {
+    # Normally you wouldn't stack the same plugin, but for these purposes
+    lives_ok { Log::Any::Plugin->add('Stringify',
+            stringifier => sub { reverse @_ }) }
         '... plugin applied ok';
 }
 
-note 'Check functionality of non-default preprocesor.'; {
+note 'Check functionality of non-default stringifier.'; {
     $log->clear;
     $log->debug('one', 'two', 'three');
     $log->contains_ok('threetwoone', '... multiple args concatenated');

@@ -1,5 +1,5 @@
-package Log::Any::Plugin::PreprocessArgs;
-# ABSTRACT: Custom argument preprocessing plugin for log adapters
+package Log::Any::Plugin::Stringify;
+# ABSTRACT: Custom argument stringification plugin for log adapters
 
 use strict;
 use warnings;
@@ -11,19 +11,19 @@ use Data::Dumper;
 sub install {
     my ($class, $adapter_class, %args) = @_;
 
-    my $preprocessor = $args{preprocessor} || \&default_preprocessor;
+    my $stringifier = $args{stringifier} || \&default_stringifier;
 
-    # Inject the preprocessor into the existing logging methods
+    # Inject the stringifier into the existing logging methods
     #
     for my $method_name ( Log::Any->logging_methods() ) {
         around($adapter_class, $method_name, sub {
             my ($old_method, $self, @args) = @_;
-            $old_method->($self, $preprocessor->(@args));
+            $old_method->($self, $stringifier->(@args));
         });
     }
 }
 
-sub default_preprocessor {
+sub default_stringifier {
     my (@args) = @_;
 
     local $Data::Dumper::Indent    = 0;
@@ -47,9 +47,9 @@ __END__
     use Log::Any::Adapter;
     Log::Any::Adapter->set('SomeAdapter');
 
-    # Apply your own argument preprocessor.
+    # Apply your own argument stringifier.
     use Log::Any::Plugin;
-    Log::Any::Plugin->add('PreprocessArgs', \&my_func);
+    Log::Any::Plugin->add('Stringify', \&my_stringifier);
 
 =head1 DESCRIPTION
 
@@ -57,7 +57,7 @@ Log::Any logging functions are only defined to have a single $msg argument.
 Some adapters accept multiple arguments (like print does), but many don't.
 You may also want to do some sort of stringification of hash and list refs.
 
-Log::Any::Plugin::PreprocessArgs allows you to inject an argument preprocessing
+Log::Any::Plugin::Stringify allows you to inject an argument stringification
 function into every logging call, so that when you write this:
 
     $log->error( ... );
@@ -69,14 +69,14 @@ you effectively get this:
 =head1 CONFIGURATION
 
 These configuration values are passed as key-value pairs:
-    Log::Any::Plugin->add('PreprocessArgs', preprocessor => \&my_func);
+    Log::Any::Plugin->add('Stringify', stringifier => \&my_func);
 
-=head2 preprocessor => &my_func
+=head2 stringifier => &my_func
 
-The preprocessor function takes a list of arguments and should return a single
+The stringifier function takes a list of arguments and should return a single
 string.
 
-See default_preprocessor below for the default preprocessor.
+See default_stringifier below for the default stringifier.
 
 =head1 METHODS
 
@@ -87,9 +87,9 @@ user.  Use Log::Any::Plugin->add() instead.
 
 Private method called by Log::Any::Plugin->add()
 
-=head2 default_preprocessor
+=head2 default_stringifier
 
-The default preprocessor function if none is supplied. Listrefs and hashrefs are
+The default stringifier function if none is supplied. Listrefs and hashrefs are
 expanded by Data::Dumper, and the whole lot is concatenated into one string.
 
 =cut

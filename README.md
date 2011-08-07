@@ -42,10 +42,10 @@ The Levels plugin adds a minimum log-level to adapters that don't support this.
     $log->warning('Now this is too');
 
 
-### Log::Any::Plugin::PreprocessArgs
+### Log::Any::Plugin::Stringify
 
-The PreprocessArgs plugin allows pre-processing of the logging arguments before
-they reach the adapter.
+The Stringify plugin allows pre-processing of the logging arguments before they reach the adapter, so that an arbitrary list of arguments can be combined into
+a single string.
 
 #### Application setup
 
@@ -53,8 +53,8 @@ they reach the adapter.
     use Log::Any::Plugin;
 
     Log::Any::Adapter->set('SomeAdapter');
-    Log::Any::Plugin->add('PreprocessArgs',
-        preprocessor => sub { join('', @_) });
+    Log::Any::Plugin->add('Stringify',
+        stringifier => sub { join('', @_) });
 
 #### Module code
 
