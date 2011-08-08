@@ -62,22 +62,3 @@ a single string.
 
     $log->trace('All these ', 3, ' arguments get logged');
 
-### Log::Any::Plugin::CodeRef
-
-The CodeRef plugin supports passing a coderef to the logger. The coderef is
-only evaluated if that log level is enabled. This can provide an speedup if the
-logging arguments are complicated.
-
-#### Application setup
-
-    use Log::Any::Adapter;
-    use Log::Any::Plugin;
-
-    Log::Any::Adapter->set('SomeAdapter');
-    Log::Any::Plugin->add('CodeRef');
-
-#### Module code
-
-    use Log::Any qw($log);
-
-    $log->error( sub { complicated_args(...) } );
