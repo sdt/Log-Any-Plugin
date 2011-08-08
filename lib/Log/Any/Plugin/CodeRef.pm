@@ -4,7 +4,7 @@ package Log::Any::Plugin::CodeRef;
 use strict;
 use warnings;
 
-use Log::Any::Plugin::Util qw( get_old_method around );
+use Log::Any::Plugin::Util qw( get_old_method set_new_method );
 
 use Data::Dumper;
 
@@ -14,17 +14,17 @@ sub install {
     # Inject the preprocessor into the existing logging methods
     #
     for my $method_name ( Log::Any->logging_methods() ) {
+        my $old_method = get_old_method($adapter_class, $method_name);
         my $is_method_name = 'is_' . $method_name;
         my $is_method = get_old_method($adapter_class, $is_method_name);
-        around($adapter_class, $method_name, sub {
-            my ($old_method, $self, @args) = @_;
-
-            return unless $self->$is_method();
-            if (ref $args[0] eq 'CODE') {
-                $old_method->($self, $args[0]->());
+        set_new_method($adapter_class, $method_name, sub {
+            return unless $_[0]->$is_method();
+            if (ref $_[1] eq 'CODE') {
+                $old_method->($_[0], $_[1]->());
             }
             else {
-                $old_method->($self, @args);
+                my $self = shift;
+                $old_method->($self, @_);
             }
         });
     }
