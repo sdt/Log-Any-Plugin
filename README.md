@@ -7,7 +7,7 @@ It provides methods for augmenting arbitrary instances of [Log::Any::Adapters](h
 ## Motivation
 
 
-Many of the Log::Any::Adapters have extended functionality, such as being able to selectively disable various log levels, or to handle multiple arguments.
+Many of the Log::Any::Adapters have extended functionality, such as being able to selectively disable various log levels, or to handle multiple parameters to the logging calls.
 
 In order for Log::Any to be truly 'any', only the common subset of adapter functionality can be used. Any specific adapter functionality must be avoided if there is a possibility of using a different adapter at a later date.
 
@@ -44,8 +44,9 @@ The Levels plugin adds a minimum log-level to adapters that don't support this.
 
 ### Log::Any::Plugin::Stringify
 
-The Stringify plugin allows pre-processing of the logging arguments before they reach the adapter, so that an arbitrary list of arguments can be combined into
-a single string.
+The Stringify plugin allows pre-processing of the logging arguments before they reach the adapter, so that an arbitrary list of arguments can be combined into a single string.
+
+The default stringifier uses Data::Dumper to stringify arrays and hashes, and then concatenates the lot.
 
 #### Application setup
 
