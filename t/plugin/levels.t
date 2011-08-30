@@ -1,10 +1,12 @@
 #!/usr/bin/env perl
 
-use warnings;
 use strict;
+use warnings;
 
-use Test::Most          tests => 30;
-use Test::NoWarnings;
+use Test::More;
+use Test::Exception;
+
+require Test::NoWarnings if $ENV{RELEASE_TESTING};
 
 use Log::Any::Adapter;
 use Log::Any::Plugin;
@@ -92,4 +94,5 @@ note 'Check clashing method names'; {
         '... method name clashes get detected';
 }
 
-note 'Some warnings?';
+Test::NoWarnings::had_no_warnings() if $ENV{RELEASE_TESTING};
+done_testing();

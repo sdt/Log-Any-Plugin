@@ -1,10 +1,12 @@
 #!/usr/bin/env perl
 
-use warnings;
 use strict;
+use warnings;
 
-use Test::Most          tests => 15;
-use Test::NoWarnings;
+use Test::More;
+use Test::Exception;
+
+require Test::NoWarnings if $ENV{RELEASE_TESTING};
 
 
 note 'get_class_name'; {
@@ -123,3 +125,6 @@ note 'after'; {
     $y->new_method(1, 2, 3);
     is($y->{msg}, '[1 2 3]new', '... new methods work');
 }
+
+Test::NoWarnings::had_no_warnings() if $ENV{RELEASE_TESTING};
+done_testing();

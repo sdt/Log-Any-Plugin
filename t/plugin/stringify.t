@@ -1,10 +1,13 @@
 #!/usr/bin/env perl
 
-use warnings;
 use strict;
+use warnings;
 
-use Test::Most          tests => 9;
-use Test::NoWarnings;
+use Test::More;
+use Test::Differences;
+use Test::Exception;
+
+require Test::NoWarnings if $ENV{RELEASE_TESTING};
 
 use Log::Any::Adapter;
 use Log::Any::Plugin;
@@ -55,4 +58,5 @@ note 'Check functionality of non-default stringifier.'; {
     $log->contains_ok('threetwoone', '... multiple args concatenated');
 }
 
-note 'You like warnings?';
+Test::NoWarnings::had_no_warnings() if $ENV{RELEASE_TESTING};
+done_testing();
