@@ -158,4 +158,12 @@ plugin.  Individual $log objects can set a custom level with this accessor.
 
 To reset to the default log level, specify 'default'.
 
+=head1 SEE ALSO
+
+L<Log::Any::Plugin>
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to Strategic Data for sponsoring the development of this module.
+
 =cut

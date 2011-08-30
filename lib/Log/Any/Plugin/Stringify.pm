@@ -92,4 +92,12 @@ Private method called by Log::Any::Plugin->add()
 The default stringifier function if none is supplied. Listrefs and hashrefs are
 expanded by Data::Dumper, and the whole lot is concatenated into one string.
 
+=head1 SEE ALSO
+
+L<Log::Any::Plugin>
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to Strategic Data for sponsoring the development of this module.
+
 =cut

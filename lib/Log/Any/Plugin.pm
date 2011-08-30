@@ -6,7 +6,7 @@ use warnings;
 
 use Log::Any;
 use Log::Any::Adapter::Util qw( require_dynamic );
-use Log::Any::Plugin::Util qw( get_class_name );
+use Log::Any::Plugin::Util  qw( get_class_name  );
 
 use Carp qw( croak );
 
@@ -33,13 +33,13 @@ __END__
     use Log::Any::Plugin;
 
     # Create your adapter as normal
-    Log::Any::Adapter->set( 'SomeAdapter', %adapter_args );
+    Log::Any::Adapter->set( 'SomeAdapter' );
 
     # Add plugin to modify its behaviour
-    Log::Any::Plugin->add( 'SomePlugin', %plugin_args );
+    Log::Any::Plugin->add( 'Stringify' );
 
     # Multiple plugins may be used together
-    Log::Any::Plugin->add( 'OtherPlugin', %other_args );
+    Log::Any::Plugin->add( 'Levels', level => 'debug' );
 
 =head1 DESCRIPTION
 
@@ -58,8 +58,8 @@ In order for Log::Any to be truly 'any', only the common subset of adapter
 functionality can be used. Any specific adapter functionality must be avoided
 if there is a possibility of using a different adapter at a later date.
 
-Log::Any::Plugins provide a method to augment adapters with missing functionality
-so that a superset of adapter functionality can be used.
+Log::Any::Plugins provide a method to augment adapters with missing
+functionality so that a superset of adapter functionality can be used.
 
 =head1 METHODS
 
@@ -85,7 +85,12 @@ what options are supported.
 
 =back
 
-=for test_synopsis
-my (%adapter_args, %plugin_args, %other_args);
+=head1 SEE ALSO
+
+L<Log::Any>, L<Log::Any::Plugin::Levels>, L<Log::Any::Plugin::Stringify>
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to Strategic Data for sponsoring the development of this module.
 
 =cut

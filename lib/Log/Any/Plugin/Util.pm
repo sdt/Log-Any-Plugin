@@ -206,4 +206,12 @@ Either a namespace suffix, or a fully-qualified class name prefixed with '+'.
 
 =back
 
+=head1 SEE ALSO
+
+L<Log::Any::Plugin>
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to Strategic Data for sponsoring the development of this module.
+
 =cut

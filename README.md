@@ -1,65 +1,80 @@
-# Log::Any::Plugin
+# NAME
 
-Log::Any::Plugin is intended as a companion to Jonathan Swartz's excellent [Log::Any](http://search.cpan.org/~jswartz/Log-Any-0.13/lib/Log/Any.pm) module.
+Log::Any::Plugin - Adapter-modifying plugins for Log::Any
 
-It provides methods for augmenting arbitrary instances of [Log::Any::Adapters](http://search.cpan.org/~jswartz/Log-Any-Adapter-0.03/lib/Log/Any/Adapter.pm) and works much in the same manner as [Moose 'around' modifiers](http://search.cpan.org/~doy/Moose-2.0202/lib/Moose/Manual/MethodModifiers.pod) to modify logging behaviour of pre-existing adapters.
+# VERSION
 
-## Motivation
+version 0.001
 
-
-Many of the Log::Any::Adapters have extended functionality, such as being able to selectively disable various log levels, or to handle multiple parameters to the logging calls.
-
-In order for Log::Any to be truly 'any', only the common subset of adapter functionality can be used. Any specific adapter functionality must be avoided if there is a possibility of using a different adapter at a later date.
-
-Log::Any::Plugins can provide this missing functionality where required, so that a superset of adapter functionality can be used.
-
-
-In the same manner that a Log::Any::Adapter is only selected at the application level, so too are the plugins. Module code has no knowledge of the plugins.
-
-## Plugins
-
-### Log::Any::Plugin::Levels
-
-The Levels plugin adds a minimum log-level to adapters that don't support this.
-
-#### Application setup
+# SYNOPSIS
 
     use Log::Any::Adapter;
     use Log::Any::Plugin;
 
-    Log::Any::Adapter->set('SomeAdapter');
-    Log::Any::Plugin->add('Levels', level => 'warning');
+    # Create your adapter as normal
+    Log::Any::Adapter->set( 'SomeAdapter' );
 
-#### Module code
+    # Add plugin to modify its behaviour
+    Log::Any::Plugin->add( 'Stringify' );
 
-    use Log::Any qw($log);
+    # Multiple plugins may be used together
+    Log::Any::Plugin->add( 'Levels', level => 'debug' );
 
-    $log->trace('This is not logged');
-    $log->warning('But this is');
+# DESCRIPTION
 
-    $log->level('trace');
+Log::Any::Plugin is a method for augmenting arbitrary instances of
+Log::Any::Adapters.
 
-    $log->warning('Now this is too');
+Log::Any::Plugins work much in the same manner as Moose 'around' modifiers to
+augment logging behaviour of pre-existing adapters.
 
+# MOTIVATION
 
-### Log::Any::Plugin::Stringify
+Many of the Log::Any::Adapters have extended functionality, such as being
+able to selectively disable various log levels, or to handle multiple arguments.
 
-The Stringify plugin allows pre-processing of the logging arguments before they reach the adapter, so that an arbitrary list of arguments can be combined into a single string.
+In order for Log::Any to be truly 'any', only the common subset of adapter
+functionality can be used. Any specific adapter functionality must be avoided
+if there is a possibility of using a different adapter at a later date.
 
-The default stringifier uses Data::Dumper to stringify arrays and hashes, and then concatenates the lot.
+Log::Any::Plugins provide a method to augment adapters with missing
+functionality so that a superset of adapter functionality can be used.
 
-#### Application setup
+# METHODS
 
-    use Log::Any::Adapter;
-    use Log::Any::Plugin;
+## add ( $plugin, [ %plugin_args ] )
 
-    Log::Any::Adapter->set('SomeAdapter');
-    Log::Any::Plugin->add('Stringify',
-        stringifier => sub { join('', @_) });
+This is the single method for adding plugins to adapters. It works in a
+similar function to Log::Any::Adapter->set()
 
-#### Module code
+- $plugin
 
-    use Log::Any qw($log);
+The plugin class to add to the currently active adapter. If the class is in
+the Log::Any::Plugin:: namespace, you can simply specify the name, otherwise
+prefix a '+'.
 
-    $log->trace('All these ', 3, ' arguments get logged');
+    eg. '+My::Plugin::Class'
 
+- %plugin_args
+
+These are plugin specific arguments. See the individual plugin documentation for
+what options are supported.
+
+# SEE ALSO
+
+[Log::Any](http://search.cpan.org/perldoc?Log::Any), [Log::Any::Plugin::Levels](http://search.cpan.org/perldoc?Log::Any::Plugin::Levels), [Log::Any::Plugin::Stringify](http://search.cpan.org/perldoc?Log::Any::Plugin::Stringify)
+
+# ACKNOWLEDGEMENTS
+
+Thanks to Strategic Data for sponsoring the development of this module.
+
+# AUTHOR
+
+Stephen Thirlwall <sdt@cpan.org>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Stephen Thirlwall.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
