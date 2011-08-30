@@ -4,7 +4,7 @@ package Log::Any::Plugin;
 use strict;
 use warnings;
 
-use Log::Any;
+use Log::Any 0.12;
 use Log::Any::Adapter::Util qw( require_dynamic );
 use Log::Any::Plugin::Util  qw( get_class_name  );
 
