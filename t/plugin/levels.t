@@ -30,23 +30,22 @@ note 'Applying LogLevel plugin.'; {
 
 note 'Check that enabled message types get logged correctly'; {
     ok( $log->is_error, '... $log->error is enabled' );
-    $log->empty_ok('... log should be empty');
+    $log->clear;
     $log->error('error');
     $log->contains_ok('error', '... error gets logged');
 }
 
 note 'Check that disabled message types get ignored correctly'; {
     ok( ! $log->is_debug, '... $log->debug should to be disabled' );
-    $log->empty_ok('... log should be empty');
+    $log->clear;
     $log->debug('debug');
-    #$log->does_not_contain_ok('two');  # does_not_contain_ok is broken in 0.12
     $log->empty_ok('... log should still be empty (debug not logged)');
 }
 
 note 'Check synonyms'; {
     ok( ! $log->is_info, '... $log->info should be disabled' );
     ok( ! $log->is_inform, '... $log->inform should be disabled' );
-    $log->empty_ok('... log should be empty');
+    $log->clear;
     $log->info('info');
     $log->empty_ok('... log should still be empty (info not logged)');
     $log->inform('inform');
@@ -61,7 +60,7 @@ note 'Check changing the log level'; {
         '... known log levels should able to be set';
     is( $log->level, 'debug',  '... log level should now be debug' );
     ok( $log->is_debug, '... $log->debug should now be enabled' );
-    $log->empty_ok('... log should be empty');
+    $log->clear;
     $log->debug('debug');
     $log->contains_ok('debug', '... debug gets logged');
 }
