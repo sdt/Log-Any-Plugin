@@ -45,7 +45,7 @@ note 'Check functionality of default stringifier.'; {
         '... hashrefs get expanded');
 }
 
-note 'Applying Stringify plugin.'; {
+note 'Applying stacked Stringify plugin.'; {
     # Normally you wouldn't stack the same plugin, but for these purposes
     lives_ok { Log::Any::Plugin->add('Stringify',
             stringifier => sub { reverse @_ }) }
