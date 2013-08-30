@@ -9,12 +9,17 @@ use Log::Any;
 
 use Log::Any::Plugin::Util qw( get_old_method set_new_method );
 
-my $level_count = 0;
-my %level_val = map { $_ => ++$level_count } Log::Any->logging_methods();
-lock_hash(%level_val);
+my $level_count = 1;
+my %level_value = map { $_ => $level_count++ } Log::Any->logging_methods();
+my %level_name = reverse %level_value;
+$level_value{all} = 1;
+lock_hash(%level_value);
+
+my $default_value = $level_value{warning};
 
 # Inside-out storage for level field.
-my %level_store;
+my %selected_level_value;
+my %selected_level_name;
 
 sub install {
     my ($class, $adapter_class, %args) = @_;
@@ -24,32 +29,29 @@ sub install {
         . q( already exists - use 'accessor' to specify another method name)
         if get_old_method($adapter_class, $accessor);
 
-    my $default_level = _verify_level($args{level} || 'warning');
+    if ($args{level}) {
+        $default_value = _get_level_value($args{level});
+    }
 
     # Create the $log->level accessor
     set_new_method($adapter_class, $accessor, sub {
         my $self = shift;
         if (@_) {
-            my $level = shift;
-            if ($level eq 'default') {
-                delete $level_store{$self};
-            }
-            else {
-                $level_store{$self} = _verify_level($level);
-            }
+            my $level_name = shift;
+            $selected_level_value{$self} = _get_level_value($level_name);
+            $selected_level_name{$self} = $level_name;
         }
-        return $level_store{$self} || 'default';
+        return $selected_level_name{$self};
     });
 
     # Augment the $log->debug methods
     for my $method_name ( Log::Any->logging_methods() ) {
-        my $level = $method_name;
+        my $level = $level_value{$method_name};
 
         my $old_method = get_old_method($adapter_class, $method_name);
         set_new_method($adapter_class, $method_name, sub {
             my $self = shift;
-            return if $level_val{ $level_store{$self} || $default_level }
-                    > $level_val{$level};
+            return if ($selected_level_value{$self} || $default_value) > $level;
             $self->$old_method(@_);
         });
     }
@@ -58,22 +60,23 @@ sub install {
     for my $method_name ( Log::Any->detection_methods() ) {
         my $level = $method_name;
         $level =~ s/^is_//;
+        $level = $level_value{$level};
 
         my $old_method = get_old_method($adapter_class, $method_name);
         set_new_method($adapter_class, $method_name, sub {
             my $self = shift;
-            return ($level_val{ $level_store{$self} || $default_level }
-                    <= $level_val{$level})
+            return (($selected_level_value{$self} || $default_value) <= $level)
                 && $self->$old_method(@_);
         });
     }
 }
 
-sub _verify_level {
-    my ($level) = @_;
-    croak('Unknown log level ' . $level)
-        unless exists $level_val{$level};
-    return $level;
+sub _get_level_value {
+    my ($level_name) = @_;
+    return $default_value if ($level_name eq 'default');
+    croak('Unknown log level ' . $level_name)
+        unless exists $level_value{$level_name};
+    return $level_value{$level_name};
 }
 
 1;
