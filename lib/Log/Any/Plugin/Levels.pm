@@ -47,11 +47,12 @@ sub install {
     for my $method_name ( Log::Any->logging_methods() ) {
         my $level = $method_name;
 
-        around($adapter_class, $method_name, sub {
-            my ($old_method, $self, @args) = @_;
+        my $old_method = get_old_method($adapter_class, $method_name);
+        set_new_method($adapter_class, $method_name, sub {
+            my $self = shift;
             return if $level_val{ $level_store{$self} || $default_level }
                     > $level_val{$level};
-            $old_method->($self, @args);
+            $self->$old_method(@_);
         });
     }
 
