@@ -7,7 +7,7 @@ use Carp qw(croak);
 use Hash::Util qw( lock_hash );
 use Log::Any;
 
-use Log::Any::Plugin::Util qw( around get_old_method set_new_method );
+use Log::Any::Plugin::Util qw( get_old_method set_new_method );
 
 my $level_count = 0;
 my %level_val = map { $_ => ++$level_count } Log::Any->logging_methods();
