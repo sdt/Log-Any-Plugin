@@ -14,8 +14,6 @@ my %level_val = map { $_ => ++$level_count } Log::Any->logging_methods();
 lock_hash(%level_val);
 
 # Inside-out storage for level field.
-# Normally, we'd clear this out in a DESTROY method, but given the bounded
-# nature of $log creation, this shouldn't be necessary. (TODO: check this)
 my %level_store;
 
 sub install {
