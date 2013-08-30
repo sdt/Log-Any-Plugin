@@ -4,7 +4,7 @@ Log::Any::Plugin - Adapter-modifying plugins for Log::Any
 
 # VERSION
 
-version 0.001
+version 0.002
 
 # SYNOPSIS
 
@@ -42,23 +42,23 @@ functionality so that a superset of adapter functionality can be used.
 
 # METHODS
 
-## add ( $plugin, [ %plugin_args ] )
+## add ( $plugin, \[ %plugin\_args \] )
 
 This is the single method for adding plugins to adapters. It works in a
 similar function to Log::Any::Adapter->set()
 
 - $plugin
 
-The plugin class to add to the currently active adapter. If the class is in
-the Log::Any::Plugin:: namespace, you can simply specify the name, otherwise
-prefix a '+'.
+    The plugin class to add to the currently active adapter. If the class is in
+    the Log::Any::Plugin:: namespace, you can simply specify the name, otherwise
+    prefix a '+'.
 
-    eg. '+My::Plugin::Class'
+        eg. '+My::Plugin::Class'
 
-- %plugin_args
+- %plugin\_args
 
-These are plugin specific arguments. See the individual plugin documentation for
-what options are supported.
+    These are plugin specific arguments. See the individual plugin documentation for
+    what options are supported.
 
 # SEE ALSO
 
@@ -74,7 +74,7 @@ Stephen Thirlwall <sdt@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Stephen Thirlwall.
+This software is copyright (c) 2013 by Stephen Thirlwall.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
