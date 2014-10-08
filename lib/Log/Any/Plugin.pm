@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use Log::Any 0.12;
-use Log::Any::Adapter::Util qw( require_dynamic );
 use Log::Any::Plugin::Util  qw( get_class_name  );
 
 use Carp qw( croak );
@@ -16,7 +15,10 @@ sub add {
     my $adapter_class = ref Log::Any->get_logger(category => caller());
 
     $plugin_class = get_class_name($plugin_class);
-    require_dynamic($plugin_class);
+    unless ( defined( eval "require $plugin_class" ) )
+    {    ## no critic (ProhibitStringyEval)
+        die $@;
+    }
 
     $plugin_class->install($adapter_class, %plugin_args);
 }
