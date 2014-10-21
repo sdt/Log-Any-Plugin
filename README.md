@@ -4,7 +4,7 @@ Log::Any::Plugin - Adapter-modifying plugins for Log::Any
 
 # VERSION
 
-version 0.002
+version 0.003
 
 # SYNOPSIS
 
@@ -62,7 +62,7 @@ similar function to Log::Any::Adapter->set()
 
 # SEE ALSO
 
-[Log::Any](http://search.cpan.org/perldoc?Log::Any), [Log::Any::Plugin::Levels](http://search.cpan.org/perldoc?Log::Any::Plugin::Levels), [Log::Any::Plugin::Stringify](http://search.cpan.org/perldoc?Log::Any::Plugin::Stringify)
+[Log::Any](https://metacpan.org/pod/Log::Any), [Log::Any::Plugin::Levels](https://metacpan.org/pod/Log::Any::Plugin::Levels), [Log::Any::Plugin::Stringify](https://metacpan.org/pod/Log::Any::Plugin::Stringify)
 
 # ACKNOWLEDGEMENTS
 
@@ -74,7 +74,7 @@ Stephen Thirlwall <sdt@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Stephen Thirlwall.
+This software is copyright (c) 2014 by Stephen Thirlwall.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
