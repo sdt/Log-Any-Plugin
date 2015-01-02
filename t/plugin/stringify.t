@@ -9,10 +9,9 @@ use Test::Exception;
 
 require Test::NoWarnings if $ENV{RELEASE_TESTING};
 
-use Log::Any::Adapter;
 use Log::Any::Plugin;
 
-Log::Any::Adapter->set('Test');
+use Log::Any::Test;
 use Log::Any qw($log);
 
 note 'Stringify plugin not applied yet. Checking default behaviour.'; {
