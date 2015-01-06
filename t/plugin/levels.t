@@ -81,10 +81,6 @@ note 'Applying LogLevel plugin again.'; {
         '... plugin applied ok';
 }
 
-note 'Checking that the inner is_xxx methods get ANDed into the new result'; {
-    ok( ! $log->is_trace, '... $log->trace should still be disabled' );
-}
-
 note 'Check clashing method names'; {
     throws_ok {
         Log::Any::Plugin->add('Levels', accessor => 'contains_ok')
