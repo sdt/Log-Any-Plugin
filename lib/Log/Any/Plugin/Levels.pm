@@ -4,21 +4,16 @@ package Log::Any::Plugin::Levels;
 use strict;
 use warnings;
 use Carp qw(croak);
-use Hash::Util qw( lock_hash );
 use Log::Any;
 
-use Log::Any::Plugin::Util qw( get_old_method set_new_method );
+use Log::Any::Adapter::Util qw( numeric_level );
+use Log::Any::Plugin::Util qw(
+    all_logging_methods get_old_method set_new_method
+);
 
-my $level_count = 1;
-my %level_value = map { $_ => $level_count++ } Log::Any->logging_methods();
-my %level_name = reverse %level_value;
-$level_value{all} = 1;
-lock_hash(%level_value);
-
-my $default_value = $level_value{warning};
+my $default_level = 'warning';
 
 # Inside-out storage for level field.
-my %selected_level_value;
 my %selected_level_name;
 
 sub install {
@@ -30,7 +25,7 @@ sub install {
         if get_old_method($adapter_class, $accessor);
 
     if ($args{level}) {
-        $default_value = _get_level_value($args{level});
+        $default_level = $args{level};
     }
 
     # Create the $log->level accessor
@@ -38,45 +33,50 @@ sub install {
         my $self = shift;
         if (@_) {
             my $level_name = shift;
-            $selected_level_value{$self} = _get_level_value($level_name);
+            _get_level_value($level_name); # check
             $selected_level_name{$self} = $level_name;
         }
         return $selected_level_name{$self};
     });
 
     # Augment the $log->debug methods
-    for my $method_name ( Log::Any->logging_methods() ) {
-        my $level = $level_value{$method_name};
+    for my $method_name ( all_logging_methods() ) {
+        my $level = numeric_level($method_name);
 
         my $old_method = get_old_method($adapter_class, $method_name);
         set_new_method($adapter_class, $method_name, sub {
             my $self = shift;
-            return if ($selected_level_value{$self} || $default_value) > $level;
+            return if $level > _get_threshold_level($self);
             $self->$old_method(@_);
         });
     }
 
     # Augment the $log->is_debug methods
-    for my $method_name ( Log::Any->detection_methods() ) {
-        my $level = $method_name;
-        $level =~ s/^is_//;
-        $level = $level_value{$level};
+    for my $level_name ( all_logging_methods() ) {
+        my $method_name = 'is_' . $level_name;
+        my $level_value = numeric_level($level_name);
 
         my $old_method = get_old_method($adapter_class, $method_name);
         set_new_method($adapter_class, $method_name, sub {
             my $self = shift;
-            return (($selected_level_value{$self} || $default_value) <= $level)
-                && $self->$old_method(@_);
+            return if $level_value > _get_threshold_level($self);
+            return $self->$old_method(@_);
         });
     }
 }
 
 sub _get_level_value {
     my ($level_name) = @_;
-    return $default_value if ($level_name eq 'default');
+    $level_name = $default_level if ($level_name eq 'default');
+    my $level_value = numeric_level($level_name);
     croak('Unknown log level ' . $level_name)
-        unless exists $level_value{$level_name};
-    return $level_value{$level_name};
+        unless defined $level_value;
+    return $level_value;
+}
+
+sub _get_threshold_level {
+    my ($self) = @_;
+    return _get_level_value($selected_level_name{$self} || $default_level);
 }
 
 1;
