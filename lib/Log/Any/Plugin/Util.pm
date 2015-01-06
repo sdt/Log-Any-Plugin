@@ -4,6 +4,7 @@ package Log::Any::Plugin::Util;
 use strict;
 use warnings;
 use Carp qw(croak);
+use Log::Any qw();
 
 use base qw(Exporter);
 
@@ -11,6 +12,7 @@ our @EXPORT_OK = qw(
     get_old_method
     set_new_method
     get_class_name
+    all_logging_methods
 );
 
 sub get_old_method {
@@ -33,6 +35,12 @@ sub get_class_name {
                                       : 'Log::Any::Plugin::' . $name;
 }
 
+sub all_logging_methods {
+    my ($class) = @_;
+
+    return ( Log::Any->logging_methods, Log::Any->log_level_aliases );
+}
+
 1;
 
 __END__
@@ -45,7 +53,7 @@ These functions are only of use to authors of Log::Any::Plugin classes.
 
 Users should see Log::Any::Plugin instead.
 
-=head1 FUNCTIONS
+=head1 CLASS METHODS
 
 =head2 get_old_method ( $class, $method_name )
 
@@ -84,6 +92,10 @@ in Log::Any::Plugin.
 Either a namespace suffix, or a fully-qualified class name prefixed with '+'.
 
 =back
+
+=head2 all_logging_methods
+
+Return an array of all the Log:Any logging methods and aliases
 
 =head1 SEE ALSO
 
