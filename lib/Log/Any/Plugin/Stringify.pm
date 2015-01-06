@@ -4,7 +4,9 @@ package Log::Any::Plugin::Stringify;
 use strict;
 use warnings;
 
-use Log::Any::Plugin::Util qw( get_old_method set_new_method );
+use Log::Any::Plugin::Util qw(
+    all_logging_methods get_old_method set_new_method
+);
 
 use Data::Dumper;
 
@@ -15,7 +17,7 @@ sub install {
 
     # Inject the stringifier into the existing logging methods
     #
-    for my $method_name ( Log::Any->logging_methods() ) {
+    for my $method_name ( all_logging_methods() ) {
         my $old_method = get_old_method($adapter_class, $method_name);
         set_new_method($adapter_class, $method_name, sub {
             my $self = shift;
