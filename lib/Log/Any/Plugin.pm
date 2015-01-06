@@ -4,7 +4,7 @@ package Log::Any::Plugin;
 use strict;
 use warnings;
 
-use Log::Any 0.12;
+use Log::Any 1.00;
 use Log::Any::Plugin::Util  qw( get_class_name  );
 
 use Carp qw( croak );
