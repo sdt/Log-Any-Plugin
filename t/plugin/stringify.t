@@ -19,11 +19,12 @@ note 'Stringify plugin not applied yet. Checking default behaviour.'; {
     eq_or_diff($log->msgs, [
         { category => 'main', level => 'debug', message => 'debug msg' },
     ], '... single args work as expected');
-    $log->error('error msg', 'not logged');
+    $log->error('error msg', 'are logged', 'now');
     eq_or_diff($log->msgs, [
         { category => 'main', level => 'debug', message => 'debug msg' },
-        { category => 'main', level => 'error', message => 'error msg' },
-    ], '... further args skipped as expected');
+        { category => 'main', level => 'error',
+          message => 'error msg are logged now' },
+    ], '... further args are concatenated with space');
 }
 
 note 'Applying Stringify plugin.'; {
