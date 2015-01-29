@@ -2,6 +2,10 @@ Revision History for perl module Log::Any::Plugin
 
 {{$NEXT}}
 
+0.004     2015-01-29T15:56:16AEDT+1100
+
+    - Updated to work correctly with Log::Any 1.x
+
 0.003     2014-10-09T10:31:03AEDT+1100
 
     - Remove missing Log::Any::Adapter::Util dependency
