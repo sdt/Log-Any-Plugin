@@ -26,6 +26,7 @@ sub install {
 
     if ($args{level}) {
         $default_level = $args{level};
+        _get_level_value($default_level); # check
     }
 
     # Create the $log->level accessor
