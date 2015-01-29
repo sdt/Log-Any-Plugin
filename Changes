@@ -2,6 +2,10 @@ Revision History for perl module Log::Any::Plugin
 
 {{$NEXT}}
 
+0.005     2015-01-29T16:41:59AEDT+1100
+
+    - Restore level param check in Levels plugin
+
 0.004     2015-01-29T15:56:16AEDT+1100
 
     - Updated to work correctly with Log::Any 1.x
