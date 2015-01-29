@@ -8,10 +8,9 @@ use Test::Exception;
 
 require Test::NoWarnings if $ENV{RELEASE_TESTING};
 
-use Log::Any::Adapter;
 use Log::Any::Plugin;
 
-Log::Any::Adapter->set('Test');
+use Log::Any::Test;
 use Log::Any qw($log);
 
 note 'LogLevel has not been applied yet. Check default behaviour.'; {
@@ -80,10 +79,6 @@ note 'Applying LogLevel plugin again.'; {
     lives_ok { Log::Any::Plugin->add('Levels',
         level => 'trace', accessor => 'level2') }
         '... plugin applied ok';
-}
-
-note 'Checking that the inner is_xxx methods get ANDed into the new result'; {
-    ok( ! $log->is_trace, '... $log->trace should still be disabled' );
 }
 
 note 'Check clashing method names'; {
