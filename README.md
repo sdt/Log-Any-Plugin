@@ -4,7 +4,7 @@ Log::Any::Plugin - Adapter-modifying plugins for Log::Any
 
 # VERSION
 
-version 0.005
+version 0.006
 
 # SYNOPSIS
 
