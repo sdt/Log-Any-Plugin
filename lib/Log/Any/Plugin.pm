@@ -7,6 +7,7 @@ use warnings;
 use Log::Any 1.00;
 use Log::Any::Plugin::Util  qw( get_class_name  );
 
+use Class::Load qw( try_load_class );
 use Carp qw( croak );
 
 sub add {
@@ -15,10 +16,9 @@ sub add {
     my $adapter_class = ref Log::Any->get_logger(category => caller());
 
     $plugin_class = get_class_name($plugin_class);
-    unless ( defined( eval "require $plugin_class" ) )
-    {    ## no critic (ProhibitStringyEval)
-        die $@;
-    }
+
+    my ($loaded, $error) = try_load_class($plugin_class);
+    die $error unless $loaded;
 
     $plugin_class->install($adapter_class, %plugin_args);
 }
