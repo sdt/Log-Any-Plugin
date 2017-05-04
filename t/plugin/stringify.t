@@ -41,7 +41,7 @@ note 'Check functionality of default stringifier.'; {
     $log->contains_ok('four\[5,6,7\]', '... listrefs get expanded');
 
     $log->error('eight', { a => 'one', b => 'two' });
-    $log->contains_ok(q(eight{a=\'one\',b=\'two\'}),
+    $log->contains_ok(qr(eight\{a=\'one\',b=\'two\'\}),
         '... hashrefs get expanded');
 }
 
