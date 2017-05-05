@@ -2,6 +2,10 @@ Revision History for perl module Log::Any::Plugin
 
 {{$NEXT}}
 
+    - Fix unescaped braces in regular expression warning
+    - Use Class::Load rather than stringy eval
+        - thanks José Joaquín Atria
+
 0.005     2015-01-29T16:41:59AEDT+1100
 
     - Restore level param check in Levels plugin
