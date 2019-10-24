@@ -4,7 +4,7 @@ Log::Any::Plugin - Adapter-modifying plugins for Log::Any
 
 # VERSION
 
-version 0.006
+version 0.008
 
 # SYNOPSIS
 
@@ -74,7 +74,12 @@ Stephen Thirlwall <sdt@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Stephen Thirlwall.
+This software is copyright (c) 2019, 2017, 2016, 2015, 2014, 2013, 2011 by Stephen Thirlwall.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
+
+# CONTRIBUTORS
+
+- José Joaquín Atria <jjatria@gmail.com>
+- Kamal Advani <kamal@namingcrisis.net>

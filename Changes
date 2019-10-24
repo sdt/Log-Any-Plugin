@@ -2,6 +2,10 @@ Revision History for perl module Log::Any::Plugin
 
 {{$NEXT}}
 
+0.008     2019-10-24T15:19:21AEDT+1100
+
+    - Add Encode plugin - thanks Kamal Advani
+
 0.006     2016-08-28T09:55:48UTC+0000
 
     - Escape curlies in test regexes
