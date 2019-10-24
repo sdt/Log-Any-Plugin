@@ -90,12 +90,6 @@ user. Use Log::Any::Plugin->add() instead.
 Private method called by Log::Any::Plugin->add()
 
 
-=head1 ADAPTER METHODS
-
-All available adapter methods are wrapped so messages may be encoded before
-being passed back down to the adapter's methods.
-
-
 =head1 ACKNOWLEDGEMENTS
 
 Thanks to Strategic Data for sponsoring the development of this module.

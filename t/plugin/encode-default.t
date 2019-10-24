@@ -8,9 +8,8 @@ use Encode qw( encode_utf8 );
 
 use Test::More;
 use Test::Exception;
-use Test::Warn;
 
-require Test::NoWarnings;
+require Test::NoWarnings if $ENV{RELEASE_TESTING};
 
 use Log::Any::Plugin;
 
@@ -55,5 +54,5 @@ note 'Check that logged message now encoded'; {
 }
 
 
-Test::NoWarnings::had_no_warnings();
+Test::NoWarnings::had_no_warnings() if $ENV{RELEASE_TESTING};
 done_testing();
