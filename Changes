@@ -6,6 +6,11 @@ Revision History for perl module Log::Any::Plugin
 
     - Add Encode plugin - thanks Kamal Advani
 
+0.007     2017-05-05T16:52:56AEST+1000
+
+    - Use Class::Load rather than stringy eval
+        - thanks José Joaquín Atria
+
 0.006     2016-08-28T09:55:48UTC+0000
 
     - Escape curlies in test regexes
