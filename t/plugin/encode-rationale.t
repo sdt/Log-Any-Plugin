@@ -43,8 +43,9 @@ note "Applying Encode plugin with default encoding"; {
 }
 
 note 'Check that logging no longer produces the warning'; {
-    # verified in release mode via `Test::NoWarnings`.
-    $log->error($msg);
+    warnings_are { $log->error($msg) }
+        [ ],
+        "No warnings expected after encoding in effect";
 }
 
 
