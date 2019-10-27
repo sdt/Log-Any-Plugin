@@ -86,10 +86,6 @@ __END__
 
 =pod
 
-=head1 NAME
-
-Log::Any::Plugin::FilterArgs - custom log-level filtering for log adapters
-
 =head1 SYNOPSIS
 
     # Set up some kind of logger.
