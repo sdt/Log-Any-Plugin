@@ -94,9 +94,9 @@ what options are supported.
 
 =over
 
-=item * You must have [cpanm|App::cpanminus](https://metacpan.org/pod/App::cpanminus) installed.
+=item * You must have L<cpanm|https://metacpan.org/pod/App::cpanminus> installed.
 
-=item * Then install [Dist::Zilla](http://dzil.org/) via `cpanm Dist::Zilla`. This is
+=item * Then install L<Dist::Zilla|http://dzil.org/> via C<cpanm Dist::Zilla>. This is
         a L<Dist::Zilla>-managed project.
 
 =back
