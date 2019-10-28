@@ -88,9 +88,9 @@ what options are supported.
 =back
 
 
-=head1 CONTRIBUTING
+=head1 PLUGIN DEVELOPMENT
 
-=head2 Prerequisites
+=head2 Build Tools
 
 =over
 
@@ -102,9 +102,7 @@ what options are supported.
 =back
 
 
-=head2 Authoring Plugins
-
-=head3 Prerequisites
+=head2 Setup Dependencies
 
 On initial check out of the project, set-up the required dependencies as follows:
 
@@ -125,7 +123,7 @@ requiring explicit installation of L<Module::Build::Version>.
 See the error logs as directed in the C<cpanm> output.
 
 
-=head3 Plugin Development
+=head2 Development
 
 A plugin's entry point is via its C<install> method which has the signature:
 
@@ -141,8 +139,10 @@ define confines of their scope. This module packages in several use-case
 driven plugins that may serve as examples E<mdash> check the
 L<SEE ALSO|"SEE ALSO"> section.
 
-Once a plugin is implemented, and tests added, the full suite of tests can be
-run through a sequence of:
+Once a plugin is implemented, and tests added, re-run the L<Setup Dependencies|"Setup Dependencies">
+steps to get any new required dependencies.
+
+Next, run the full suite of tests through a sequence of:
 
     dzil test
     dzil test --author
