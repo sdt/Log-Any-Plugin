@@ -20,12 +20,15 @@ use Log::Any qw( $log );
 
 
 my $msg = "鸿涛 \x{1f4A9} -- adapter with encoding set should have no warnings or errors on wide char output";
+
 my $encoding = 'UTF-16';
 my $encoder = find_encoding($encoding)
     or croak "No encoder found for encoding[$encoding]";
 
-my $msg_rx = quotemeta($msg);
-my $encoded_msg_rx = quotemeta( $encoder->encode($msg) );
+my $encoded_msg = $encoder->encode($msg);
+
+my $msg_rx = qr/\Q$msg\E/;
+my $encoded_msg_rx = qr/\Q$encoded_msg\E/;
 
 
 note 'log->error expected to be available to test functionality'; {
