@@ -24,6 +24,9 @@ my $encoding = 'UTF-16';
 my $encoder = find_encoding($encoding)
     or croak "No encoder found for encoding[$encoding]";
 
+my $msg_rx = quotemeta($msg);
+my $encoded_msg_rx = quotemeta( $encoder->encode($msg) );
+
 
 note 'log->error expected to be available to test functionality'; {
     $log->clear();
@@ -33,7 +36,7 @@ note 'log->error expected to be available to test functionality'; {
     $log->error("test");
 
     is( scalar @{$log->msgs()}, 1, "Exactly 1 error message expected to be logged" );
-    $log->contains_ok("test", "message[test] expected to be logged");
+    $log->contains_ok(qr/test/, "message[test] expected to be logged");
 }
 
 note 'Encode has not been applied yet. Check default behaviour.'; {
@@ -41,8 +44,8 @@ note 'Encode has not been applied yet. Check default behaviour.'; {
 
     $log->error($msg);
 
-    $log->does_not_contain_ok($encoder->encode($msg), 'no encoded message occurs');
-    $log->contains_ok($msg, 'but still logged in original form');
+    $log->does_not_contain_ok($encoded_msg_rx, 'no encoded message occurs');
+    $log->contains_ok($msg_rx, 'but still logged in original form');
 }
 
 note "Applying Encode plugin with custom [$encoding] encoding"; {
@@ -55,7 +58,7 @@ note 'Check that logged message now encoded'; {
 
     $log->error($msg);
 
-    $log->contains_ok($encoder->encode($msg), 'message is logged and encoded');
+    $log->contains_ok($encoded_msg_rx, 'message is logged and encoded');
 }
 
 
