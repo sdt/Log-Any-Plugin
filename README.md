@@ -4,7 +4,7 @@ Log::Any::Plugin - Adapter-modifying plugins for Log::Any
 
 # VERSION
 
-version 0.009
+version 0.010
 
 # SYNOPSIS
 
@@ -64,8 +64,8 @@ similar function to Log::Any::Adapter->set()
 
 ## Build Tools
 
-- You must have \[cpanm|App::cpanminus\](https://metacpan.org/pod/App::cpanminus) installed.
-- Then install \[Dist::Zilla\](http://dzil.org/) via \`cpanm Dist::Zilla\`. This is
+- You must have [cpanm](https://metacpan.org/pod/App::cpanminus) installed.
+- Then install [Dist::Zilla](http://dzil.org/) via `cpanm Dist::Zilla`. This is
         a [Dist::Zilla](https://metacpan.org/pod/Dist%3A%3AZilla)-managed project.
 
 ## Setup Dependencies
