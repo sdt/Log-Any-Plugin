@@ -2,6 +2,11 @@ Revision History for perl module Log::Any::Plugin
 
 {{$NEXT}}
 
+0.009     2019-10-28T11:36:28AEDT+1100
+
+    - Add plugin development docs - thans Kamal Advani
+    - Restore missing 0.007 release in Changes file
+
 0.008     2019-10-24T15:19:21AEDT+1100
 
     - Add Encode plugin - thanks Kamal Advani

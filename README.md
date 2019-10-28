@@ -4,7 +4,7 @@ Log::Any::Plugin - Adapter-modifying plugins for Log::Any
 
 # VERSION
 
-version 0.008
+version 0.009
 
 # SYNOPSIS
 
@@ -60,9 +60,66 @@ similar function to Log::Any::Adapter->set()
     These are plugin specific arguments. See the individual plugin documentation for
     what options are supported.
 
+# PLUGIN DEVELOPMENT
+
+## Build Tools
+
+- You must have \[cpanm|App::cpanminus\](https://metacpan.org/pod/App::cpanminus) installed.
+- Then install \[Dist::Zilla\](http://dzil.org/) via \`cpanm Dist::Zilla\`. This is
+        a [Dist::Zilla](https://metacpan.org/pod/Dist%3A%3AZilla)-managed project.
+
+## Setup Dependencies
+
+On initial check out of the project, set-up the required dependencies as follows:
+
+    # Get dependencies
+    dzil authordeps --missing | cpanm
+    dzil listdeps --author | cpanm
+
+Next run a basic test suite:
+
+    dzil test
+
+Install the necessary missed dependencies as needed via `cpanm` and rerun
+tests till they execute successfully.
+
+For example, there's a [known issue](https://rt.cpan.org/Public/Bug/Display.html?id=98689)
+requiring explicit installation of [Module::Build::Version](https://metacpan.org/pod/Module%3A%3ABuild%3A%3AVersion).
+
+See the error logs as directed in the `cpanm` output.
+
+## Development
+
+A plugin's entry point is via its `install` method which has the signature:
+
+    install($class, $adapter_class, %args)
+
+`$adapter_class` is the [Log::Any::Adapter](https://metacpan.org/pod/Log%3A%3AAny%3A%3AAdapter) adapter class to be used, e.g.
+`Stderr`.
+
+`%args` is a hash of arguments to configure or customise the plugin.
+
+Plugins add new facilities or augment existing facilities, so it's hard to
+define confines of their scope. This module packages in several use-case
+driven plugins that may serve as examples — check the
+[SEE ALSO](#see-also) section.
+
+Once a plugin is implemented, and tests added, re-run the [Setup Dependencies](#setup-dependencies)
+steps to get any new required dependencies.
+
+Next, run the full suite of tests through a sequence of:
+
+    dzil test
+    dzil test --author
+    dzil test --release
+
+Finally to remove any temporarily generated artifacts, run:
+
+    dzil clean
+
 # SEE ALSO
 
-[Log::Any](https://metacpan.org/pod/Log::Any), [Log::Any::Plugin::Levels](https://metacpan.org/pod/Log::Any::Plugin::Levels), [Log::Any::Plugin::Stringify](https://metacpan.org/pod/Log::Any::Plugin::Stringify)
+[Log::Any](https://metacpan.org/pod/Log%3A%3AAny), [Log::Any::Plugin::Levels](https://metacpan.org/pod/Log%3A%3AAny%3A%3APlugin%3A%3ALevels), [Log::Any::Plugin::Stringify](https://metacpan.org/pod/Log%3A%3AAny%3A%3APlugin%3A%3AStringify)
 
 # ACKNOWLEDGEMENTS
 
