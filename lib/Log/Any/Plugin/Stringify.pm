@@ -10,11 +10,14 @@ use Log::Any::Plugin::Util qw(
 
 use Data::Dumper;
 
+my $separator;
+
+
 sub install {
     my ($class, $adapter_class, %args) = @_;
 
-    my $sep = defined $args{separator} ? $args{separator} : '';
-    my $stringifier = $args{stringifier} || default_stringifier_builder($sep);
+    $separator = defined $args{separator} ? $args{separator} : '';
+    my $stringifier = $args{stringifier} || \&default_stringifier;
 
     # Inject the stringifier into the existing logging methods
     #
@@ -27,19 +30,16 @@ sub install {
     }
 }
 
-sub default_stringifier_builder {
-    my ($sep) = shift;
-    return sub {
-        my @args = @_;
+sub default_stringifier {
+    my @args = @_;
 
-        local $Data::Dumper::Indent    = 0;
-        local $Data::Dumper::Pair      = '=';
-        local $Data::Dumper::Quotekeys = 0;
-        local $Data::Dumper::Sortkeys  = 1;
-        local $Data::Dumper::Terse     = 1;
+    local $Data::Dumper::Indent    = 0;
+    local $Data::Dumper::Pair      = '=';
+    local $Data::Dumper::Quotekeys = 0;
+    local $Data::Dumper::Sortkeys  = 1;
+    local $Data::Dumper::Terse     = 1;
 
-        return join($sep, map { ref $_ ? Dumper($_) : $_ } @args);
-    }
+    return join($separator, map { ref $_ ? Dumper($_) : $_ } @args);
 }
 
 1;
@@ -87,7 +87,7 @@ See default_stringifier below for the default stringifier behaviour.
 
 =head2 separator => ''
 
-See default_stringifier_builder below for the default stringifier behaviour.
+See default_stringifier below for the default stringifier behaviour.
 
 
 =head1 METHODS
@@ -99,9 +99,9 @@ user.  Use Log::Any::Plugin->add() instead.
 
 Private method called by Log::Any::Plugin->add()
 
-=head2 default_stringifier_builder
+=head2 default_stringifier
 
-The default stringifier function creator if no stringifier function is supplied.
+The default stringifier if no custom stringifier is supplied.
 
 Listrefs and hashrefs are expanded by L<Data::Dumper>, and the whole lot is
 concatenated into one string.
