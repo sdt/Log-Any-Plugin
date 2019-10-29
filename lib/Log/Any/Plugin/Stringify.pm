@@ -13,7 +13,8 @@ use Data::Dumper;
 sub install {
     my ($class, $adapter_class, %args) = @_;
 
-    my $stringifier = $args{stringifier} || \&default_stringifier;
+    my $sep = defined $args{separator} ? $args{separator} : '';
+    my $stringifier = $args{stringifier} || default_stringifier_builder($sep);
 
     # Inject the stringifier into the existing logging methods
     #
@@ -26,16 +27,19 @@ sub install {
     }
 }
 
-sub default_stringifier {
-    my (@args) = @_;
+sub default_stringifier_builder {
+    my ($sep) = shift;
+    return sub {
+        my @args = @_;
 
-    local $Data::Dumper::Indent    = 0;
-    local $Data::Dumper::Pair      = '=';
-    local $Data::Dumper::Quotekeys = 0;
-    local $Data::Dumper::Sortkeys  = 1;
-    local $Data::Dumper::Terse     = 1;
+        local $Data::Dumper::Indent    = 0;
+        local $Data::Dumper::Pair      = '=';
+        local $Data::Dumper::Quotekeys = 0;
+        local $Data::Dumper::Sortkeys  = 1;
+        local $Data::Dumper::Terse     = 1;
 
-    return join('', map { ref $_ ? Dumper($_) : $_ } @args);
+        return join($sep, map { ref $_ ? Dumper($_) : $_ } @args);
+    }
 }
 
 1;
@@ -79,7 +83,12 @@ These configuration values are passed as key-value pairs:
 The stringifier function takes a list of arguments and should return a single
 string.
 
-See default_stringifier below for the default stringifier.
+See default_stringifier below for the default stringifier behaviour.
+
+=head2 separator => ''
+
+See default_stringifier_builder below for the default stringifier behaviour.
+
 
 =head1 METHODS
 
@@ -90,10 +99,17 @@ user.  Use Log::Any::Plugin->add() instead.
 
 Private method called by Log::Any::Plugin->add()
 
-=head2 default_stringifier
+=head2 default_stringifier_builder
 
-The default stringifier function if none is supplied. Listrefs and hashrefs are
-expanded by Data::Dumper, and the whole lot is concatenated into one string.
+The default stringifier function creator if no stringifier function is supplied.
+
+Listrefs and hashrefs are expanded by L<Data::Dumper>, and the whole lot is
+concatenated into one string.
+
+The C<separator> configuration argument can be used to customise how log arguments
+are separated from each other, e.g. C<trace("hello", "there", [1, 2, 2])> with
+a separator of '##' results in: C<hello##there##[1,2,2]> -- the Dumper-driven
+output is not affected by the separator.
 
 =head1 SEE ALSO
 
