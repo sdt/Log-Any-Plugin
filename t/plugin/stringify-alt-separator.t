@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Test::More;
-use Test::Differences;
 use Test::Exception;
 
 require Test::NoWarnings if $ENV{RELEASE_TESTING};
